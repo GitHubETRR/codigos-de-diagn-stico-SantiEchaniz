@@ -1,0 +1,82 @@
+#include <stdio.h>
+#define MAX 50
+#define cant_pers 5
+# include <string.h>
+
+int imprimiropciones();
+void buscarproducto();
+
+struct inventario{
+        char producto[MAX];
+        int cantidad;
+        float precio;
+    };
+
+
+int main()
+{
+    int ingreso;
+    int i = 0;
+    char rta;
+    int sep =1;
+    struct inventario inventario[cant_pers];
+    imprimiropciones();
+    scanf("%d", &ingreso);
+    
+    do{
+        switch (ingreso){
+            case 1: 
+            
+            do{
+            printf("\nIngresa el nombre del producto en minusculas: ");
+            scanf("\n %[^\n]", inventario[i].producto);
+            printf("\nAhora ingrese el stock de ese producto: ");
+            scanf("%d", &inventario[i].cantidad);
+            printf("\nAhora ingrese el precio de ese producto: ");
+            scanf("%f", &inventario[i].precio);
+            i++;
+            
+            printf("\n¿Quiere seguir agregando productos? escriba s");
+            scanf(" %c", &rta);
+            }while(rta=='s');
+            
+            
+            break;
+        
+            case 2:
+            printf("una remerita de boca");
+            break;
+            
+            case 3:
+            system("clear");
+            printf("\n%s", inventario[0].producto);
+            printf(" %d", inventario[0].cantidad);
+            printf(" %f", inventario[0].precio);
+            break;
+            printf("\nLista de productos ingresados:\n");
+                for (int j = 0; j < i; j++) {
+                    printf("\nProducto: %s", inventario[j].producto);
+                    printf("  Cantidad: %d", inventario[j].cantidad);
+                    printf("  Precio: %f\n", inventario[j].precio);
+                }
+        
+            default:
+            printf("Lo ingresado no está en los valores especificados");
+            break;
+        }
+        printf("\n ¿Quiere seguir usando el programa?, presione 1, si si, y 0 si no");
+        scanf("%d", &sep);
+        
+    }while (sep==1);
+
+    
+}
+
+
+int imprimiropciones(){
+    printf("Que quieres hacer");
+    printf("\n 1.Buscar producto");
+    printf("\n 2.Agregar producto");
+    printf("\n 3.Imprimir todos los productos y sus stocks y precio");
+    printf("\nOpcion: ");
+}
