@@ -46,18 +46,19 @@ int main()
         
             case 2:
             printf("una remerita de boca");
+            buscarproducto(inventario, i);
                 break;
             
             
             case 3:
             if (i == 0) {
-                printf("\nNo hay productos ingresados aún.\n");
+                printf("\nNo hay productos ingresados todavia\n");
             } else {
                 printf("\nLista de productos ingresados:\n");
-                for (int j = 0; j < i; j++) {
-                    printf("\nProducto: %s", inventario[j].producto);
-                    printf("  Cantidad: %d", inventario[j].cantidad);
-                    printf("  Precio: %f\n", inventario[j].precio);
+                for (int a = 0; a < i; a++) {
+                    printf("\nProducto: %s", inventario[a].producto);
+                    printf("  Cantidad: %d", inventario[a].cantidad);
+                    printf("  Precio: %f\n", inventario[a].precio);
                 }
             }
                 break;
@@ -82,4 +83,27 @@ void imprimiropciones(){
     printf("\n 2.Buscar producto");
     printf("\n 3.Imprimir todos los productos y sus stocks y precio");
     printf("\nOpcion: ");
+}
+
+void buscarproducto(struct inventario inventario[], int i) {
+    char nombre[MAX];
+    int encontrado =0;
+
+    printf("\nIngresá el nombre del producto que queres buscar: ");
+    scanf(" %[^\n]", nombre);
+
+    for (int b = 0; b < i; b++) {
+        if (strcmp(inventario[b].producto, nombre) == 0) { //para comparar palabras busque en internet y encontré strcmp(), que es una función de la biblioteca string que compara dos cadenas de caracteres y devuelve 0 si son iguales
+            printf("\nProducto encontrado:");
+            printf("\nNombre: %s", inventario[b].producto);
+            printf("  Cantidad: %d", inventario[b].cantidad);
+            printf("  Precio: %.2f\n", inventario[b].precio);
+            encontrado = 1;
+            break;
+        }
+    }
+
+    if (!encontrado) {
+        printf("\nproducto no encontrado\n");
+    }
 }
