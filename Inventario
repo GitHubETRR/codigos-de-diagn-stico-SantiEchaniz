@@ -37,7 +37,7 @@ int main()
                 scanf("%f", &inventario[i].precio);
                 i++;
             
-                printf("\n¿Quiere seguir agregando productos? (s/n)");
+                printf("\n¿Quiere seguir agregando productos? (s-n)");
                 scanf(" %c", &rta);
                 
                 }while(rta=='s');
@@ -69,7 +69,7 @@ int main()
                 break;
         }
         
-        printf("\n ¿Quiere seguir usando el programa? (s/n)");
+        printf("\n ¿Quiere seguir usando el programa? (s-n)");
         scanf(" %c", &sep);
     }while (sep=='s');
 
