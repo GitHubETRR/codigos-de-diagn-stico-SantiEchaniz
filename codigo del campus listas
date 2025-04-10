@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define CANT 30
+#define SALIR 1
+typedef struct alumno{
+    char nombre[CANT];
+    char apellido[CANT];
+    struct alumno *next;
+}alumno_t;
+
+void imprimir(alumno_t *);
+alumno_t * agregar_alumno(alumno_t * lista);
+int salir (void);
+int main(){
+    alumno_t *_6TEL=NULL;
+    do{
+        _6TEL=agregar_alumno(_6TEL);
+    
+    }while(salir()!=SALIR);
+    imprimir(_6TEL);
+    liberar(_6TEL);
+    return 0;
+}
+
+void imprimir(alumno_t * lista){
+    
+    while(lista!=NULL){
+        printf("Nombre %s\n",lista->nombre);
+        printf("Apellido %s\n",lista->apellido);
+        lista=lista->next;
+    }
+    
+}
+
+alumno_t * agregar_alumno(alumno_t * lista){
+    alumno_t *alu_ptr=( alumno_t *)malloc(sizeof(alumno_t));
+    alu_ptr->next=lista;
+    printf("Ingrese el nombre:\n");
+    scanf("%s",alu_ptr->nombre);
+    printf("Ingrese el apellido:\n");
+    scanf("%s",alu_ptr->apellido);
+    lista=alu_ptr;
+    printf("Alumno creado exitosamente!\n");
+    return lista;
+}
+
+int salir (void){
+    int salir=0;
+    printf("Desea agrega un alumno mas?\n");
+    printf("0 para si %d para no\n", SALIR);
+    scanf("%d",&salir);
+    return salir;
+}
+
+void liberar (alumno_t * lista){
+    alumno_t *aux;
+     while(lista!=NULL){
+        aux=lista;
+        lista=lista->next;
+        free(aux);
+    }
+    
+}
