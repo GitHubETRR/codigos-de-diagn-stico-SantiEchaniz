@@ -9,6 +9,8 @@ typedef struct alumno{
     struct alumno *next;
 }alumno_t;
 
+void liberar (alumno_t * lista);
+
 void imprimir(alumno_t *);
 alumno_t * agregar_alumno(alumno_t * lista);
 int salir (void);
