@@ -35,10 +35,10 @@ int main() {
                 break;
             case 3:
                 liberar(mi_lista);
-                printf("Hasta luego!\n");
+                printf("fin"\n");
                 break;
             default:
-                printf("Opción inválida.\n");
+                printf("Opción invalida\n");
         }
 
     } while (opcion != 3);
@@ -49,14 +49,14 @@ int main() {
 tarea_t *agregar_tarea(tarea_t *lista) {
     tarea_t *nueva = (tarea_t *)malloc(sizeof(tarea_t));
     if (nueva == NULL) {
-        printf("Error al asignar memoria.\n");
+        printf("Error memoria\n");
         return lista;
     }
 
     printf("Ingresá la descripción de la tarea: ");
     fgets(nueva->descripcion, MAX, stdin);
     nueva->descripcion[strcspn(nueva->descripcion, "\n")] = 0;
-    nueva->next = lista; // se agrega al principio
+    nueva->next = lista; // se agrega al principiop
     printf("Tarea agregada!\n");
 
     return nueva;
