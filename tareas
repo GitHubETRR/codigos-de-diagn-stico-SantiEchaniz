@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #define MAX 50
 
 typedef struct tarea {
@@ -9,9 +8,12 @@ typedef struct tarea {
     struct tarea *next;
 } tarea_t;
 
+
 tarea_t *agregar_tarea(tarea_t *lista);
 void mostrar_tareas(tarea_t *lista);
 void liberar(tarea_t *lista);
+
+
 
 int main() {
     tarea_t *mi_lista = NULL;
@@ -46,6 +48,10 @@ int main() {
 
     return 0;
 }
+
+
+
+
 
 tarea_t *agregar_tarea(tarea_t *lista) {
     tarea_t *nueva = (tarea_t *)malloc(sizeof(tarea_t));
