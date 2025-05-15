@@ -32,7 +32,8 @@ int main() {
                 break;
             case 2:
                 mostrar_tareas(mi_lista); //la función de mostrar tareas, le pasa la lista de las que tengo hasta ahora
-                break;
+            break;
+
             case 3:
                 liberar(mi_lista); //
                 printf("fin"\n");
