@@ -9,7 +9,7 @@ typedef struct tarea {
     struct tarea *next;
 } tarea_t;
 
-tarea_t *agregar_tarea(tarea_t *lista); //declaro las funciones
+tarea_t *agregar_tarea(tarea_t *lista);
 void mostrar_tareas(tarea_t *lista);
 void liberar(tarea_t *lista);
 
@@ -28,10 +28,10 @@ int main() {
 
         switch (opcion) {
             case 1:
-                mi_lista = agregar_tarea(mi_lista); //llama a la funcion, le pasa la lista de hasta ahora y guarda el nuevo inicio de la lista
+                mi_lista = agregar_tarea(mi_lista);
                 break;
             case 2:
-                mostrar_tareas(mi_lista); //la función de mostrar tareas, le pasa la lista de las que tengo hasta ahora
+                mostrar_tareas(mi_lista); 
             break;
 
             case 3:
@@ -70,7 +70,7 @@ void mostrar_tareas(tarea_t *lista) {
     }
 
     printf("\nTareas\n");
-    while (lista != NULL) {
+    while (lista != NULL) { //el null porq si es opuesto significa que tiene algo
         printf("- %s\n", lista->descripcion);
         lista = lista->next;
     }
