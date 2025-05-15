@@ -1,66 +1,95 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define CANT 30
-#define SALIR 1
-typedef struct alumno{
-    char nombre[CANT];
-    char apellido[CANT];
-    struct alumno *next;
-}alumno_t;
+#define MAX 50
 
-void liberar (alumno_t * lista);
+typedef struct tarea {
+    char descripcion[MAX];
+    struct tarea *next;
+} tarea_t;
 
-void imprimir(alumno_t *);
-alumno_t * agregar_alumno(alumno_t * lista);
-int salir (void);
-int main(){
-    alumno_t *_6TEL=NULL;
-    do{
-        _6TEL=agregar_alumno(_6TEL);
-    
-    }while(salir()!=SALIR);
-    imprimir(_6TEL);
-    liberar(_6TEL);
+
+tarea_t *agregar_tarea(tarea_t *lista);
+void mostrar_tareas(tarea_t *lista);
+void liberar(tarea_t *lista);
+void borrar_tareas(tarea_t *lista);
+
+
+int main() {
+    tarea_t *mi_lista = NULL;
+    int opcion;
+
+    do {
+        printf("\nmenu\n");
+        printf("1. agregar tarea\n");
+        printf("2. vver tareas\n");
+        printf("3. salir\n");
+        printf("Elegi una opción: ");
+        scanf("%d", &opcion);
+        getchar();
+
+        switch (opcion) {
+            case 1:
+                mi_lista = agregar_tarea(mi_lista);
+                break;
+            case 2:
+                mostrar_tareas(mi_lista); 
+            break;
+
+            case 3:
+                borrar_tareas(mi_lista);
+                break;
+            
+            case 4:
+                liberar(mi_lista); //
+                printf("fin"\n");
+                break;
+            default:
+                printf("Opción invalida\n");
+        }
+
+    } while (opcion != 3);
+
     return 0;
 }
 
-void imprimir(alumno_t * lista){
-    
-    while(lista!=NULL){
-        printf("Nombre %s\n",lista->nombre);
-        printf("Apellido %s\n",lista->apellido);
-        lista=lista->next;
+
+
+
+
+tarea_t *agregar_tarea(tarea_t *lista) {
+    tarea_t *nueva = (tarea_t *)malloc(sizeof(tarea_t));
+    if (nueva == NULL) {
+        printf("Error memoria\n");
+        return lista;
     }
-    
+
+    printf("Ingresá la descripción de la tarea: ");
+    fgets(nueva->descripcion, MAX, stdin);
+    nueva->descripcion[strcspn(nueva->descripcion, "\n")] = 0;
+    nueva->next = lista; // se agrega al principiop
+    printf("Tarea agregada!\n");
+
+    return nueva;
 }
 
-alumno_t * agregar_alumno(alumno_t * lista){
-    alumno_t *alu_ptr=( alumno_t *)malloc(sizeof(alumno_t));
-    alu_ptr->next=lista;
-    printf("Ingrese el nombre:\n");
-    scanf("%s",alu_ptr->nombre);
-    printf("Ingrese el apellido:\n");
-    scanf("%s",alu_ptr->apellido);
-    lista=alu_ptr;
-    printf("Alumno creado exitosamente!\n");
-    return lista;
+void mostrar_tareas(tarea_t *lista) {
+    if (lista == NULL) {
+        printf("No hay tareas.\n");
+        return;
+    }
+
+    printf("\nTareas\n");
+    while (lista != NULL) { //el null porq si es opuesto significa que tiene algo
+        printf("- %s\n", lista->descripcion);
+        lista = lista->next;
+    }
 }
 
-int salir (void){
-    int salir=0;
-    printf("Desea agrega un alumno mas?\n");
-    printf("0 para si %d para no\n", SALIR);
-    scanf("%d",&salir);
-    return salir;
-}
-
-void liberar (alumno_t * lista){
-    alumno_t *aux;
-     while(lista!=NULL){
-        aux=lista;
-        lista=lista->next;
+void liberar(tarea_t *lista) {
+    tarea_t *aux;
+    while (lista != NULL) {
+        aux = lista;
+        lista = lista->next;
         free(aux);
     }
-    
-}
