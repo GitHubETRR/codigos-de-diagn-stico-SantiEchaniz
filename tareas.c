@@ -13,7 +13,7 @@ typedef struct tarea {
     struct tarea *next;
 } tarea_t;
 
-
+void ingreso(int *opcion);
 tarea_t *agregar_tarea(tarea_t *lista);
 void mostrar_tareas(tarea_t *lista);
 void tareahecha(tarea_t **lista);
@@ -26,25 +26,19 @@ int main() {
     int opcion;
 
     do {
-        printf("\nMenu\n");
-        printf("1. Agregar tarea\n");
-        printf("2. Ver tareas\n");
-        printf("3. Tarea hecha\n");
-        printf("4. Salir\n");
-        printf("Elegi una opción: ");
-        scanf("%d", &opcion);
-        getchar();
-
+        ingreso(&opcion);
+        
         switch (opcion) {
             case agregar:
                 mi_lista = agregar_tarea(mi_lista);
-                break;
+            break;
+                
             case mostrar:
                 mostrar_tareas(mi_lista); 
             break;
             
             case hecho:
-            tareahecha(&mi_lista);
+                tareahecha(&mi_lista);
             break;
 
             case reestablecer:
@@ -55,19 +49,30 @@ int main() {
                 printf("Opción invalida\n");
         }
 
-    } while (opcion != 3);
+    } while (opcion != reestablecer);
 
     return 0;
 }
 
 
 
+void ingreso(int *opcion){
+printf("\nMenu\n");
+        printf("1. Agregar tarea\n");
+        printf("2. Ver tareas\n");
+        printf("3. Tarea hecha\n");
+        printf("4. Salir\n");
+        printf("Elegi una opción: ");
+        scanf("%d", &opcion);
+        getchar();
+}
 
 
 tarea_t *agregar_tarea(tarea_t *lista){
     tarea_t *nueva = (tarea_t *)malloc(sizeof(tarea_t));
     if (nueva == NULL) {
         printf("Error memoria\n");
+        
         return lista;
     }
     printf("De que materia es esa tarea: ");
@@ -78,7 +83,7 @@ tarea_t *agregar_tarea(tarea_t *lista){
     nueva->descripcion[strcspn(nueva->descripcion, "\n")] = 0;
     nueva->next = lista; // se agrega al principiop
     printf("Tarea agregada!\n");
-
+    
     return nueva;
 }
 
@@ -91,7 +96,7 @@ void mostrar_tareas(tarea_t *lista){
     }
     printf("\nTareas\n");
     while (lista != NULL) { //el null porq si es opuesto significa que tiene algo
-        printf("- %s\n", lista->materia);
+        printf("- %s: ", lista->materia);
         printf("     %s\n", lista->descripcion);
         lista = lista->next;
     }
