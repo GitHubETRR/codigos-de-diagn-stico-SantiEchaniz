@@ -13,7 +13,7 @@ typedef struct tarea {
     struct tarea *next;
 } tarea_t;
 
-void ingreso(int *opcion);
+int ingreso(void);
 tarea_t *agregar_tarea(tarea_t *lista);
 void mostrar_tareas(tarea_t *lista);
 void tareahecha(tarea_t **lista);
@@ -26,8 +26,8 @@ int main() {
     int opcion;
 
     do {
-        ingreso(&opcion);
-        
+        opcion = ingreso();
+    
         switch (opcion) {
             case agregar:
                 mi_lista = agregar_tarea(mi_lista);
@@ -56,16 +56,19 @@ int main() {
 
 
 
-void ingreso(int *opcion){
-printf("\nMenu\n");
-        printf("1. Agregar tarea\n");
-        printf("2. Ver tareas\n");
-        printf("3. Tarea hecha\n");
-        printf("4. Salir\n");
-        printf("Elegi una opción: ");
-        scanf("%d", &opcion);
-        getchar();
+int ingreso() {
+    int opcion;
+    printf("\nMenu\n");
+    printf("1. Agregar tarea\n");
+    printf("2. Ver tareas\n");
+    printf("3. Tarea hecha\n");
+    printf("4. Salir\n");
+    printf("Elegi una opción: ");
+    scanf("%d", &opcion);
+    getchar();
+    return opcion;
 }
+
 
 
 tarea_t *agregar_tarea(tarea_t *lista){
