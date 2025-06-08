@@ -16,7 +16,7 @@ typedef struct tarea {
 
 tarea_t *agregar_tarea(tarea_t *lista);
 void mostrar_tareas(tarea_t *lista);
-void tareahecha(tarea_t *lista);
+void tareahecha(tarea_t **lista);
 void liberar(tarea_t *lista);
 
 
@@ -26,10 +26,11 @@ int main() {
     int opcion;
 
     do {
-        printf("\nmenu\n");
-        printf("1. agregar tarea\n");
-        printf("2. ver tareas\n");
-        printf("3. salir\n");
+        printf("\nMenu\n");
+        printf("1. Agregar tarea\n");
+        printf("2. Ver tareas\n");
+        printf("3. Tarea hecha\n");
+        printf("4. Salir\n");
         printf("Elegi una opción: ");
         scanf("%d", &opcion);
         getchar();
@@ -43,11 +44,12 @@ int main() {
             break;
             
             case hecho:
+            tareahecha(&mi_lista);
             break;
 
             case reestablecer:
                 liberar(mi_lista);
-                printf("fin\n");
+                printf("Fin\n");
                 break;
             default:
                 printf("Opción invalida\n");
@@ -71,7 +73,6 @@ tarea_t *agregar_tarea(tarea_t *lista){
     printf("De que materia es esa tarea: ");
     fgets(nueva->materia, MAX, stdin);
     nueva->materia[strcspn(nueva->materia, "\n")] = 0;
-    nueva->next = lista; // se agrega al principiop
     printf("Ingresá la descripción de la tarea: ");
     fgets(nueva->descripcion, MAX, stdin);
     nueva->descripcion[strcspn(nueva->descripcion, "\n")] = 0;
@@ -91,14 +92,38 @@ void mostrar_tareas(tarea_t *lista){
     printf("\nTareas\n");
     while (lista != NULL) { //el null porq si es opuesto significa que tiene algo
         printf("- %s\n", lista->materia);
-        printf("- %s\n", lista->descripcion);
+        printf("     %s\n", lista->descripcion);
         lista = lista->next;
     }
 }
 
 
-//void tareahecha(tarea_t *lista){
-//}
+
+void tareahecha(tarea_t **lista) {
+    char materia_buscada[MAX];
+    printf("Nombre de la materia de la tarea hecha: ");
+    scanf("%s", materia_buscada);
+    tarea_t *actual = *lista;
+    tarea_t *anterior = NULL;
+    while (actual != NULL) {
+        if (strcmp(actual->materia, materia_buscada) == 0) {
+            printf("Tarea de '%s' hecha!\n", actual->materia);
+            if (anterior == NULL) {
+                *lista = actual->next;
+            } else {
+                anterior->next = actual->next;
+            }
+            free(actual);
+            return;
+        }
+        anterior = actual;
+        actual = actual->next;
+    }
+
+    printf("No tenés materias con ese nombre\n");
+}
+
+
 
 void liberar(tarea_t *lista){
     tarea_t *aux;
