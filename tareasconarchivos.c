@@ -99,8 +99,8 @@ void mostrar_tareas(tarea_t *lista){
     }
 
     if (lista == NULL) {
-        printf("No hay tareas.\n");
-        fprintf(archivo, "No hay tareas.\n");
+        printf("No hay tareas\n");
+        fprintf(archivo, "No hay tareas\n");
         fclose(archivo);
         return;
     }
@@ -115,7 +115,7 @@ void mostrar_tareas(tarea_t *lista){
     }
 
     fclose(archivo);
-    printf("\nLas tareas también se guardaron en 'tareas.txt' en la carpeta TAREASSANTU.\n");
+    printf("\nLas tareas tambien se guardaron en 'tareas.txt' en la carpeta TAREASSANTU.\n");
 }
 
 
@@ -143,7 +143,7 @@ void tareahecha(tarea_t **lista) {
         actual = actual->next;
     }
 
-    printf("No tenés materias con ese nombre\n");
+    printf("No tenes materias con ese nombre\n");
 }
 
 
