@@ -5,8 +5,7 @@
 #define mostrcontactos 2
 #define buscarcontacto 3
 #define elimcontacto 4
-#define guardar 5
-#define salir 6
+#define salir 5
 
 
 
@@ -25,7 +24,7 @@ int main()
 {
      do {
         menu();
-        printf("Elegí una opcion: ");
+        printf("Elegi una opcion: ");
         scanf("%d", &opcion);
         switch (opcion) {
             case agrecontacto:
@@ -44,10 +43,6 @@ int main()
               agenda = eliminar_contacto(agenda);
             break;
 
-            case guardar:
-              guardar_archivo(agenda);
-            break;
-
             case salir:
               guardar_archivo(agenda);
               liberar_memoria(agenda);
@@ -55,7 +50,7 @@ int main()
             break;
 
             default:
-              printf("Opción inválida\n");
+              printf("Opcion invalida\n");
             break;
         }
 
