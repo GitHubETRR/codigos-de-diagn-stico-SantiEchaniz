@@ -125,7 +125,10 @@ void mostrar_tareas(tarea_t *lista){
 void tareahecha(tarea_t **lista) {
     char materia_buscada[MAX];
     printf("Nombre de la materia de la tarea hecha: ");
-    scanf("%s", materia_buscada);
+    getchar(); // para limpiar el \n que haya quedado
+    fgets(materia_buscada, MAX, stdin);
+    materia_buscada[strcspn(materia_buscada, "\n")] = 0;
+
     tarea_t *actual = *lista;
     tarea_t *anterior = NULL;
     while (actual != NULL) {
@@ -145,6 +148,7 @@ void tareahecha(tarea_t **lista) {
 
     printf("No tenés materias con ese nombre\n");
 }
+
 
 
 
