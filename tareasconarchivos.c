@@ -94,13 +94,13 @@ tarea_t *agregar_tarea(tarea_t *lista){
 void mostrar_tareas(tarea_t *lista){
     FILE *archivo = fopen("C:\\Users\\sechaniz\\Desktop\\TAREASSANTU\\tareas.txt", "w");
     if (archivo == NULL) {
-        printf("No se pudo crear el archivo en la carpeta TAREASSANTU.\n");
+        printf("No se pudo crear el archivo\n");
         return;
     }
 
     if (lista == NULL) {
-        printf("No hay tareas\n");
-        fprintf(archivo, "No hay tareas\n");
+        printf("No hay tareas.\n");
+        fprintf(archivo, "No hay tareas.\n");
         fclose(archivo);
         return;
     }
@@ -115,7 +115,7 @@ void mostrar_tareas(tarea_t *lista){
     }
 
     fclose(archivo);
-    printf("\nLas tareas tambien se guardaron en 'tareas.txt' en la carpeta TAREASSANTU.\n");
+    printf("\nLas tarea se guardaron\n");
 }
 
 
@@ -143,7 +143,7 @@ void tareahecha(tarea_t **lista) {
         actual = actual->next;
     }
 
-    printf("No tenes materias con ese nombre\n");
+    printf("No tenés materias con ese nombre\n");
 }
 
 
