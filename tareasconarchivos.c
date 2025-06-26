@@ -11,18 +11,20 @@ typedef struct tarea {
     char materia[MAX];
     char descripcion[MAX];
     struct tarea *next;
-} tarea_t;
+} tarea;
 
 int ingreso(void);
-tarea_t *agregar_tarea(tarea_t *lista);
-void mostrar_tareas(tarea_t *lista);
-void tareahecha(tarea_t **lista);
-void liberar(tarea_t *lista);
+tarea *tareasguardadas();
+tarea *agregar_tarea(tarea *lista);
+void imprimiryguardar(tarea *lista);
+void tareahecha(tarea **lista);
+void liberar(tarea *lista);
 
 
 
 int main() {
-    tarea_t *mi_lista = NULL;
+    tarea *milista = NULL;
+    tarea *milista = tareasguardadas();
     int opcion;
 
     do {
@@ -30,19 +32,19 @@ int main() {
     
         switch (opcion) {
             case agregar:
-                mi_lista = agregar_tarea(mi_lista);
+                milista = agregar_tarea(milista);
             break;
                 
             case mostrar:
-                mostrar_tareas(mi_lista); 
+                imprimiryguardar(milista); 
             break;
             
             case hecho:
-                tareahecha(&mi_lista);
+                tareahecha(&milista);
             break;
 
             case reestablecer:
-                liberar(mi_lista);
+                liberar(milista);
                 printf("Fin\n");
                 break;
             default:
@@ -54,7 +56,31 @@ int main() {
     return 0;
 }
 
+tarea *cargar_tareas() {
+    FILE *archivo = fopen("C:\\Users\\sechaniz\\Desktop\\TAREASSANTU\\tareas.txt", "r");
+    if (!archivo) return NULL;
 
+    tarea *lista = NULL;
+    char materia[MAX];
+    char descripcion[MAX];
+
+    while (fgets(materia, MAX, archivo) && fgets(descripcion, MAX, archivo)) {
+        // Limpiar saltos de línea
+        materia[strcspn(materia, "\n")] = 0;
+        descripcion[strcspn(descripcion, "\n")] = 0;
+
+        tarea *nueva = malloc(sizeof(tarea));
+        if (!nueva) break;
+
+        strcpy(nueva->materia, materia);
+        strcpy(nueva->descripcion, descripcion);
+        nueva->next = lista;
+        lista = nueva;
+    }
+
+    fclose(archivo);
+    return lista;
+}
 
 int ingreso() {
     int opcion;
@@ -71,66 +97,62 @@ int ingreso() {
 
 
 
-tarea_t *agregar_tarea(tarea_t *lista){
-    tarea_t *nueva = (tarea_t *)malloc(sizeof(tarea_t));
+tarea *agregar_tarea(tarea *lista){
+    tarea *nueva = (tarea *)malloc(sizeof(tarea));
     if (nueva == NULL) {
-        printf("Error memoria\n");
+        printf("no se pudo reservar memoria, error\n");
         
         return lista;
     }
-    printf("De que materia es esa tarea: ");
+    printf("De que materia es esa tarea/pendiente: ");
     fgets(nueva->materia, MAX, stdin);
     nueva->materia[strcspn(nueva->materia, "\n")] = 0;
-    printf("Ingresá la descripción de la tarea: ");
+    printf("Ingresá la descripción de la tarea/pendiente: ");
     fgets(nueva->descripcion, MAX, stdin);
     nueva->descripcion[strcspn(nueva->descripcion, "\n")] = 0;
-    nueva->next = lista; // se agrega al principiop
-    printf("Tarea agregada!\n");
+    nueva->next = lista;
+    printf("Agregado!\n");
     
     return nueva;
 }
 
 
-void mostrar_tareas(tarea_t *lista){
+void imprimiryguardar(tarea *lista){
     FILE *archivo = fopen("C:\\Users\\sechaniz\\Desktop\\TAREASSANTU\\tareas.txt", "w");
     if (archivo == NULL) {
-        printf("No se pudo crear el archivo\n");
+        printf("No se pudo crear o abrir el archivo\n");
         return;
     }
 
     if (lista == NULL) {
-        printf("No hay tareas.\n");
-        fprintf(archivo, "No hay tareas.\n");
+        printf("No hay tareas/pendientes\n");
+        fprintf(archivo, "No hay tareas/pendientes\n");
         fclose(archivo);
         return;
     }
-
-    printf("\nTareas\n");
-    fprintf(archivo, "Tareas:\n");
-
-    while (lista != NULL) {
-        printf("- %s:     %s\n", lista->materia, lista->descripcion);
-        fprintf(archivo, "- %s:     %s\n", lista->materia, lista->descripcion);
+    while (lista) {
+        printf("- %s: %s\n", lista->materia, lista->descripcion);
+        fprintf(archivo, "%s\n%s\n", lista->materia, lista->descripcion);
         lista = lista->next;
     }
 
     fclose(archivo);
-    printf("\nLas tarea se guardaron\n");
+    printf("\nLas tareas/pendientes se guardaron\n");
 }
 
 
 
 
 
-void tareahecha(tarea_t **lista) {
+void tareahecha(tarea **lista) {
     char materia_buscada[MAX];
     printf("Nombre de la materia de la tarea hecha: ");
     getchar(); // para limpiar el \n que haya quedado
     fgets(materia_buscada, MAX, stdin);
     materia_buscada[strcspn(materia_buscada, "\n")] = 0;
 
-    tarea_t *actual = *lista;
-    tarea_t *anterior = NULL;
+    tarea *actual = *lista;
+    tarea *anterior = NULL;
     while (actual != NULL) {
         if (strcmp(actual->materia, materia_buscada) == 0) {
             printf("Tarea de '%s' hecha!\n", actual->materia);
@@ -152,8 +174,8 @@ void tareahecha(tarea_t **lista) {
 
 
 
-void liberar(tarea_t *lista){
-    tarea_t *aux;
+void liberar(tarea *lista){
+    tarea *aux;
     while (lista != NULL) {
         aux = lista;
         lista = lista->next;
