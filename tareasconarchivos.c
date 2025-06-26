@@ -23,7 +23,6 @@ void liberar(tarea *lista);
 
 
 int main() {
-    tarea *milista = NULL;
     tarea *milista = tareasguardadas();
     int opcion;
 
