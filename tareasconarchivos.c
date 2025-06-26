@@ -14,7 +14,7 @@ typedef struct tarea {
 } tarea;
 
 int ingreso(void);
-tarea *tareasguardadas();
+tarea *tareasGuardadas();
 tarea *agregar_tarea(tarea *lista);
 void imprimiryguardar(tarea *lista);
 void tareahecha(tarea **lista);
@@ -23,7 +23,7 @@ void liberar(tarea *lista);
 
 
 int main() {
-    tarea *milista = tareasguardadas();
+    tarea *milista = tareasGuardadas();
     int opcion;
 
     do {
@@ -53,6 +53,32 @@ int main() {
     } while (opcion != reestablecer);
 
     return 0;
+}
+
+tarea *cargar_tareas() {
+    FILE *archivo = fopen("C:\\Users\\sechaniz\\Desktop\\TAREASSANTU\\tareas.txt", "r");
+    if (!archivo) return NULL;
+
+    tarea *lista = NULL;
+    char materia[MAX];
+    char descripcion[MAX];
+
+    while (fgets(materia, MAX, archivo) && fgets(descripcion, MAX, archivo)) {
+
+        materia[scanf(materia, "\n")] = 0;
+        descripcion[scanf(descripcion, "\n")] = 0;
+
+        tarea *nueva = malloc(sizeof(tarea));
+        if (!nueva) break;
+
+        strcpy(nueva->materia, materia);
+        strcpy(nueva->descripcion, descripcion);
+        nueva->next = lista;
+        lista = nueva;
+    }
+
+    fclose(archivo);
+    return lista;
 }
 
 tarea *cargar_tareas() {
