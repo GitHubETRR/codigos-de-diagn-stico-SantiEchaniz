@@ -17,7 +17,7 @@ typedef struct contacto {
     struct contacto *sig;
 } contacto;
 
-void ingreso();
+int ingreso();
 contacto* agregar_contacto(contacto* agenda);
 void imprimir(contacto* agenda);
 void buscar(contacto* agenda);
@@ -25,12 +25,12 @@ contacto* eliminar(contacto* agenda);
 void guardar_en_archivo(contacto* agenda);
 void liberar_memoria(contacto* agenda);
 
-int main()
-{
+int main(){
+    int opcion;
+    contacto *agenda = NULL;
     do {
-        int ingreso
-        ingreso=ingreso();
-        switch (ingreso) {
+        opcion=ingreso();
+        switch (opcion) {
             case agrecontacto:
               agenda = agregar_contacto(agenda);
             break;
@@ -40,7 +40,7 @@ int main()
             break;
 
             case buscarcontacto:
-              buscar(agenda);
+               buscar(agenda);
             break;
 
             case elimcontacto:
@@ -63,10 +63,7 @@ int main()
 }
 
 
-
-
-
-ingreso(){
+int ingreso(){
     int opcion;
     printf("\nMenu\n");
     printf("1.Agregar contacto\n");
@@ -80,28 +77,21 @@ ingreso(){
 }
 
 
-
-
 contacto* agregar_contacto(contacto* agenda) {
     contacto* nuevo = malloc(sizeof(contacto));
     if (!nuevo) {
         printf("no se pudo conseguir memoria\n");
         return agenda;
     }
-
     printf("Nombre:");
     fgets(nuevo->nombre, MAX, stdin);
     nuevo->nombre[strcspn(nuevo->nombre, "\n")] = 0;
-
     printf("Numero:");
     fgets(nuevo->numero, MAX, stdin);
     nuevo->numero[strcspn(nuevo->numero, "\n")] = 0;
-
     nuevo->sig = agenda;
     return nuevo;
 }
-
-
 
 
 void imprimir(contacto* agenda) {
@@ -109,7 +99,6 @@ void imprimir(contacto* agenda) {
         printf("está vacio\n");
         return;
     }
-
     printf("\nContactos:\n");
     while (agenda) {
         printf("Nombre: %s\n", agenda->nombre);
@@ -119,15 +108,11 @@ void imprimir(contacto* agenda) {
 }
 
 
-
-
-
 void buscar(contacto* agenda) {
     char nombre[MAX];
     printf("Nombre a buscar: ");
     fgets(nombre, MAX, stdin);
     nombre[strcspn(nombre, "\n")] = 0;
-
     while (agenda) {
         if (strcmp(agenda->nombre, nombre) == 0) {
             printf("Contacto:\nNombre: %s\nNumero: %s\n", agenda->nombre, agenda->numero);
@@ -135,11 +120,8 @@ void buscar(contacto* agenda) {
         }
         agenda = agenda->sig;
     }
-
     printf("No se encontro el contacto\n");
 }
-
-
 
 
 void guardar_en_archivo(contacto* agenda) {
@@ -148,15 +130,14 @@ void guardar_en_archivo(contacto* agenda) {
         printf("No se pudo guardar el archivo\n");
         return;
     }
-
     while (agenda) {
         fprintf(archivo, "%s\n%s\n", agenda->nombre, agenda->numero);
         agenda = agenda->sig;
     }
-
     fclose(archivo);
     printf("Guardado'\n");
 }
+
 
 void liberar_memoria(contacto* agenda) {
     contacto* aux;
