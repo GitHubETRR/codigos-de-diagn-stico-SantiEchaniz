@@ -54,7 +54,7 @@ int main() {
             break;
             
             default:
-            printf("Opción invalida\n");
+            printf("Opcion invalida\n");
         }
         
     }while (opcion != SALIR);
@@ -93,7 +93,7 @@ int ingreso() {
     printf("2. Ver tareas\n");
     printf("3. Tarea hecha\n");
     printf("4. Salir\n");
-    printf("Elegi una opción: ");
+    printf("Elegi una opcion: ");
     scanf("%d", &opcion);
     getchar();
     return opcion;
@@ -105,14 +105,14 @@ tarea *agregar_tarea(tarea *lista){
         printf("no se pudo reservar memoria, error\n");
         return lista;
     }
-    printf("De que materia es esa tarea/pendiente: ");
+    printf("De que materia es esa tarea: ");
     fgets(nueva->materia, MAX, stdin);
     nueva->materia[strcspn(nueva->materia, "\n")] = 0;
-    printf("Ingresá la descripción de la tarea/pendiente: ");
+    printf("Ingresá la descripción de la tarea: ");
     fgets(nueva->descripcion, MAX, stdin);
     nueva->descripcion[strcspn(nueva->descripcion, "\n")] = 0;
     nueva->next = lista;
-    printf("Agregado!\n");
+    printf("Agregado\n");
     return nueva;
 }
 
@@ -124,8 +124,8 @@ void imprimiryguardar(tarea *lista){
     }
 
     if (lista == NULL) {
-        printf("No hay tareas/pendientes\n");
-        fprintf(archivo, "No hay tareas/pendientes\n");
+        printf("No hay tareas\n");
+        fprintf(archivo, "No hay tareas\n");
         fclose(archivo);
         return;
     }
@@ -137,7 +137,7 @@ void imprimiryguardar(tarea *lista){
     }
 
     fclose(archivo);
-    printf("\nLas tareas/pendientes se guardaron\n");
+    printf("\nLas tareas se guardaron\n");
 
 }
 
@@ -151,7 +151,7 @@ void tareahecha(tarea **lista) {
     tarea *anterior = NULL;
     while (actual != NULL) {
         if (strcmp(actual->materia, materia_buscada) == 0) {
-            printf("Tarea de '%s' hecha!\n", actual->materia);
+            printf("Tarea de '%s' hecha\n", actual->materia);
             if (anterior == NULL) {
                 *lista = actual->next;
             } else {
@@ -162,7 +162,7 @@ void tareahecha(tarea **lista) {
             anterior = actual;
             actual = actual->next;
         }
-        printf("No tenés materias con ese nombre\n");
+        printf("No tenes materias con ese nombre\n");
     }
 }
 
