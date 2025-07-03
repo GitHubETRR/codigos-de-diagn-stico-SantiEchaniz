@@ -71,8 +71,8 @@ tarea *tareasGuardadas() {
     char descripcion[MAX];
 
     while (fgets(materia, MAX, archivo) && fgets(descripcion, MAX, archivo)) {
-        materia[fgets(materia, "\n")] = 0;
-        descripcion[fgets(descripcion, "\n")] = 0;
+        materia[strcspn(materia, "\n")] = 0;
+        descripcion[strcspn(descripcion, "\n")] = 0;
         tarea *nueva = malloc(sizeof(tarea));
         if (!nueva){
         break;
@@ -160,7 +160,7 @@ void tareahecha(tarea **lista) {
                 anterior->next = actual->next;
             }
             free(actual);
-            return,
+            return;
         }
         anterior = actual;
         actual = actual->next;
