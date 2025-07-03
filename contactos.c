@@ -1,13 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define agrecontacto 1
-#define mostrcontactos 2
-#define buscarcontacto 3
-#define elimcontacto 4
-#define salir 5
 #define MAX 100
+
+typedef enum{
+    AGREGAR=1,
+    MOSTRAR,
+    BUSCAR,
+    ELIMINAR,
+    SALIR,
+}opciones_t;
+
+
 
 typedef struct contacto {
     char nombre[MAX];
@@ -33,23 +37,23 @@ int main() {
     do {
         opcion = ingreso();
         switch (opcion) {
-            case agrecontacto:
+            case AGREGAR:
                 agenda = agregar_contacto(agenda);
                 break;
                 
-            case mostrcontactos:
+            case MOSTRAR:
                 mostrar(agenda);
                 break;
                 
-            case buscarcontacto:
+            case BUSCAR:
                 buscar(agenda);
                 break;
                 
-            case elimcontacto:
+            case ELIMINAR:
                 agenda = eliminar(agenda);
                 break;
                 
-            case salir:
+            case SALIR:
                 guardartodo(agenda);
                 liberar_memoria(agenda);
                 printf("chau\n");
@@ -58,7 +62,7 @@ int main() {
             default:
                 printf("Opcion invalida\n");
         }
-    } while (opcion != salir);
+    } while (opcion != SALIR);
     
     return 0;
 }
@@ -131,7 +135,7 @@ void buscar(contacto* agenda) {
         if (strcmp(agenda->nombre, nombre) == 0) {
             printf("Contacto encontrado:\n");
             printf("Nombre: %s\n", agenda->nombre);
-            printf("Número: %s\n", agenda->numero);
+            printf("Numero: %s\n", agenda->numero);
             printf("Email: %s\n", agenda->mail);
             printf("Notas: %s\n", agenda->notas);
             return;
@@ -170,7 +174,7 @@ contacto* eliminar(contacto* agenda) {
 }
 
 void guardartodo(contacto* agenda) {
-    FILE *archivo = fopen("C:\Users\sechaniz\Desktop\TAREASSANTU\ContactosSantu.txt", "w");
+    FILE *archivo = fopen("C:\\Users\\sechaniz.ETRR\\Desktop\\OTROS\\ContactosSantu.txt", "w");
     if (!archivo) {
         printf("No se pudo guardar el archivo\n");
         return;
@@ -184,7 +188,7 @@ void guardartodo(contacto* agenda) {
 }
 
 contacto* cargar_anterior() {
-    FILE *archivo = fopen("C:\Users\sechaniz\Desktop\TAREASSANTU\ContactosSantu.txt", "r");
+    FILE *archivo = fopen("C:\\Users\\sechaniz.ETRR\\Desktop\\OTROS\\ContactosSantu.txt", "r");
     if (!archivo) {
         // estaba vació, así que null
         return NULL;
@@ -219,7 +223,6 @@ contacto* cargar_anterior() {
     fclose(archivo);
     return agenda;
 }
-
 
 
 void liberar_memoria(contacto* agenda) {
