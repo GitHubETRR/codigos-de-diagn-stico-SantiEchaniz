@@ -3,13 +3,13 @@
 #include <string.h>
 #define MAX 100
 
-typedef enum{
+typedef enum {
     AGREGAR=1,
     MOSTRAR,
     BUSCAR,
     ELIMINAR,
     SALIR,
-}opciones_t;
+} opciones_t;
 
 
 
