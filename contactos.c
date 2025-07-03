@@ -18,17 +18,18 @@ typedef struct contacto {
 } contacto;
 
 int ingreso();
+contacto* cargar_anterior();
 contacto* agregar_contacto(contacto* agenda);
-void imprimir(contacto* agenda);
+void mostrar(contacto* agenda);
 void buscar(contacto* agenda);
 contacto* eliminar(contacto* agenda);
-void guardar_en_archivo(contacto* agenda);
+void guardartodo(contacto* agenda);
 void liberar_memoria(contacto* agenda);
-contacto* cargar_desde_archivo();
+
 
 int main() {
     int opcion;
-    contacto *agenda = cargar_desde_archivo();
+    contacto *agenda = cargar_anterior();
     do {
         opcion = ingreso();
         switch (opcion) {
@@ -37,7 +38,7 @@ int main() {
                 break;
                 
             case mostrcontactos:
-                imprimir(agenda);
+                mostrar(agenda);
                 break;
                 
             case buscarcontacto:
@@ -49,7 +50,7 @@ int main() {
                 break;
                 
             case salir:
-                guardar_en_archivo(agenda);
+                guardartodo(agenda);
                 liberar_memoria(agenda);
                 printf("chau\n");
                 break;
@@ -102,7 +103,7 @@ contacto* agregar_contacto(contacto* agenda) {
     return nuevo;
 }
 
-void imprimir(contacto* agenda) {
+void mostrar(contacto* agenda) {
     if (!agenda) {
         printf("Vacio\n");
         return;
@@ -168,7 +169,7 @@ contacto* eliminar(contacto* agenda) {
     return agenda;
 }
 
-void guardar_en_archivo(contacto* agenda) {
+void guardartodo(contacto* agenda) {
     FILE *archivo = fopen("C:\Users\sechaniz\Desktop\TAREASSANTU\ContactosSantu.txt", "w");
     if (!archivo) {
         printf("No se pudo guardar el archivo\n");
@@ -182,7 +183,7 @@ void guardar_en_archivo(contacto* agenda) {
     printf("Agenda guardada en archivo\n");
 }
 
-contacto* cargar_desde_archivo() {
+contacto* cargar_anterior() {
     FILE *archivo = fopen("C:\Users\sechaniz\Desktop\TAREASSANTU\ContactosSantu.txt", "r");
     if (!archivo) {
         // estaba vació, así que null
