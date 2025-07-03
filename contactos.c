@@ -206,8 +206,8 @@ contacto* cargar_anterior() {
         if (!fgets(nuevo->numero, MAX, archivo)) break;
         nuevo->numero[strcspn(nuevo->numero, "\n")] = 0;
 
-        if (!fgets(nuevo->email, MAX, archivo)) break;
-        nuevo->email[strcspn(nuevo->mail, "\n")] = 0;
+        if (!fgets(nuevo->mail, MAX, archivo)) break;
+        nuevo->mail[strcspn(nuevo->mail, "\n")] = 0;
 
         if (!fgets(nuevo->notas, MAX, archivo)) break;
         nuevo->notas[strcspn(nuevo->notas, "\n")] = 0;
