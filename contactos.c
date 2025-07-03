@@ -29,7 +29,7 @@ void liberar_memoria(contacto* agenda);
 
 int main() {
     int opcion;
-    contacto *agenda = cargar_anterior();
+    contacto *agenda = cargar_anterior(); //la actualizo con lo viejo
     do {
         opcion = ingreso();
         switch (opcion) {
