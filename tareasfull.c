@@ -2,16 +2,20 @@
 #include <stdlib.h>
 #include <string.h>
 #define MAX 50
-#define agregar 1
-#define mostrar 2
-#define hecho 3
-#define reestablecer 4
 
 typedef struct tarea {
     char materia[MAX];
     char descripcion[MAX];
     struct tarea *next;
 } tarea;
+
+typedef enum{
+    AGREGAR=1,
+    MOSTRAR,
+    HECHO,
+    SALIR,
+    BORRAR,
+}opciones_t;
 
 int ingreso(void);
 tarea *tareasGuardadas();
@@ -27,33 +31,38 @@ int main() {
         opcion = ingreso();
 
         switch (opcion) {
-            case agregar:
+            case AGREGAR:
                 milista = agregar_tarea(milista);
             break;
                 
-            case mostrar:
+            case MOSTRAR:
                 imprimiryguardar(milista); 
             break;
         
-            case hecho:
+            case HECHO:
                 tareahecha(&milista);
             break;
 
-            case reestablecer:
+            case SALIR:
                 liberar(milista);
-                printf("Fin\n");
+                printf("chau\n");
+            break;
+            
+            case BORRAR:
+            
+
             break;
             
             default:
             printf("Opción invalida\n");
         }
         
-    }while (opcion != reestablecer);
+    }while (opcion != SALIR);
     return 0;
 }
 
 tarea *tareasGuardadas() {
-    FILE *archivo = fopen("C:\Users\sechaniz\Desktop\TAREASSANTU\tareas.txt", "r");
+    FILE *archivo = fopen("C:\\Users\\sechaniz.ETRR\\Desktop\\VCSCODE EN C\\tareas.txt", "r");
     if (!archivo){
         return NULL;
     }
@@ -62,8 +71,8 @@ tarea *tareasGuardadas() {
     char descripcion[MAX];
 
     while (fgets(materia, MAX, archivo) && fgets(descripcion, MAX, archivo)) {
-        materia[scanf(materia, "\n")] = 0;
-        descripcion[scanf(descripcion, "\n")] = 0;
+        materia[fgets(materia, "\n")] = 0;
+        descripcion[fgets(descripcion, "\n")] = 0;
         tarea *nueva = malloc(sizeof(tarea));
         if (!nueva){
         break;
@@ -108,7 +117,7 @@ tarea *agregar_tarea(tarea *lista){
 }
 
 void imprimiryguardar(tarea *lista){
-    FILE *archivo = fopen("C:\Users\sechaniz\Desktop\TAREASSANTU\tareas.txt", "w");
+    FILE *archivo = fopen("C:\\Users\\sechaniz.ETRR\\Desktop\\VCSCODE EN C\\tareas.txt", "w");
     if (archivo == NULL) {
         printf("No se pudo crear o abrir el archivo\n");
         return;
@@ -134,12 +143,14 @@ void imprimiryguardar(tarea *lista){
 
 void tareahecha(tarea **lista) {
     char materia_buscada[MAX];
+    
     printf("Nombre de la materia de la tarea hecha: ");
-    getchar(); // para limpiar el \n que haya quedado
     fgets(materia_buscada, MAX, stdin);
     materia_buscada[strcspn(materia_buscada, "\n")] = 0;
+    
     tarea *actual = *lista;
     tarea *anterior = NULL;
+    
     while (actual != NULL) {
         if (strcmp(actual->materia, materia_buscada) == 0) {
             printf("Tarea de '%s' hecha!\n", actual->materia);
@@ -147,14 +158,14 @@ void tareahecha(tarea **lista) {
                 *lista = actual->next;
             } else {
                 anterior->next = actual->next;
-                free(actual);
-                return;
             }
-            anterior = actual;
-            actual = actual->next;
+            free(actual);
+            return,
         }
-        printf("No tenés materias con ese nombre\n");
+        anterior = actual;
+        actual = actual->next;
     }
+    printf("No tenés materias con ese nombre\n");
 }
 
 void liberar(tarea *lista){
