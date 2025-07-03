@@ -110,13 +110,13 @@ void mostrar(contacto* agenda) {
     }
     printf("\nContactos:\n");
     while (agenda) {
-        int i;
+        int i=1;
         printf("Contacto %d:", i);
         printf("Nombre: %s\n", agenda->nombre);
         printf("Numero: %s\n", agenda->numero);
-        printf("Email: %s\n", agenda->email);
+        printf("Email: %s\n", agenda->mail);
         printf("Notas: %s\n", agenda->notas);
-        printf("------------------------\n");
+        printf("--------------------------------------------------------\n");
         agenda = agenda->sig;
         i++;
     }
@@ -132,7 +132,7 @@ void buscar(contacto* agenda) {
             printf("Contacto encontrado:\n");
             printf("Nombre: %s\n", agenda->nombre);
             printf("Número: %s\n", agenda->numero);
-            printf("Email: %s\n", agenda->email);
+            printf("Email: %s\n", agenda->mail);
             printf("Notas: %s\n", agenda->notas);
             return;
         }
@@ -176,7 +176,7 @@ void guardartodo(contacto* agenda) {
         return;
     }
     while (agenda) {
-        fprintf(archivo, "%s\n%s\n%s\n%s\n", agenda->nombre, agenda->numero, agenda->email, agenda->notas);
+        fprintf(archivo, "%s\n%s\n%s\n%s\n", agenda->nombre, agenda->numero, agenda->mail, agenda->notas);
         agenda = agenda->sig;
     }
     fclose(archivo);
@@ -207,7 +207,7 @@ contacto* cargar_anterior() {
         nuevo->numero[strcspn(nuevo->numero, "\n")] = 0;
 
         if (!fgets(nuevo->email, MAX, archivo)) break;
-        nuevo->email[strcspn(nuevo->email, "\n")] = 0;
+        nuevo->email[strcspn(nuevo->mail, "\n")] = 0;
 
         if (!fgets(nuevo->notas, MAX, archivo)) break;
         nuevo->notas[strcspn(nuevo->notas, "\n")] = 0;
