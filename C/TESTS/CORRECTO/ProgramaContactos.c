@@ -3,6 +3,7 @@
 #include <string.h>
 #define MAX 100
 
+
 typedef enum {
     AGREGAR=1,
     MOSTRAR,
@@ -10,7 +11,6 @@ typedef enum {
     ELIMINAR,
     SALIR,
 } opciones_t;
-
 
 
 typedef struct contacto {
@@ -80,6 +80,7 @@ int ingreso() {
     while (getchar() != '\n'); // limpio
     return opcion;
 }
+
 
 contacto* agregar_contacto(contacto* agenda) {
     contacto* nuevo = malloc(sizeof(contacto));

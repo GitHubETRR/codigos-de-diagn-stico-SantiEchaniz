@@ -21,6 +21,7 @@ typedef struct contacto {
     struct contacto *sig;
 } contacto;
 
+
 int ingreso();
 contacto* cargar_anterior();
 contacto* agregar_contacto(contacto* agenda);
