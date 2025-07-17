@@ -1,12 +1,13 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>    
-#define numeroSecreto = 23;
+#define numeroSecreto 23
 
 using namespace std;
 
 int main() {
-    int numeroSecreto, intento, intentos = 0;
+    int intento = 0;
+    int intentos = 0;
 
 
     cout << "adivina el numero =" << endl;
@@ -22,7 +23,8 @@ int main() {
         } else if (intento > numeroSecreto) {
             cout << "Demasiado alto. Intenta otra vez." << endl;
         } else {
-            cout << "Adivinaste el numero" << endl;
+            cout << "Adivinaste el numero en "<< intentos << " intentos" << endl;
+            
         }
     } while (intento != numeroSecreto);
 
