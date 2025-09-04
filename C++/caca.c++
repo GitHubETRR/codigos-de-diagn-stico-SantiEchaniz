@@ -1,13 +1,14 @@
 #include <iostream>
 using namespace std;
 
+
 int main() {
     double saldo = 10000.0;  // saldo inicial
     int opcion;
     double monto;
 
     do {
-        cout << "\nCAJERO AUTOMATICO\n";
+        cout << "\nCAJERO\n";
         cout << "1. Consultar saldo\n";
         cout << "2. Depositar dinero\n";
         cout << "3. Retirar dinero\n";
