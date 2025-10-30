@@ -1,27 +1,22 @@
 #include <iostream>
 using namespace std;
+int menu();
 
 
 int main() {
     double saldo = 10000.0;  // saldo inicial
-    int opcion;
+    int opcionprogram;
+    
     double monto;
 
     do {
-        cout << "\nCAJERO\n";
-        cout << "1. Consultar saldo\n";
-        cout << "2. Depositar dinero\n";
-        cout << "3. Retirar dinero\n";
-        cout << "0. Salir\n";
-        cout << "Elija una opcion: ";
-        cin >> opcion;
-
-        switch(opcion) {
+        opcionprogram=menu();
+        switch(opcionprogram) {
             case 1:
                 cout << "Su saldo es: $" << saldo << endl;
                 break;
             case 2:
-                cout << "Ingrese monto a depositar: ";
+                cout << "Ingrese el monto a ingresar: ";
                 cin >> monto;
                 if (monto > 0) {
                     saldo += monto;
@@ -50,4 +45,18 @@ int main() {
     } while (opcion != 0);
 
     return 0;
+}
+
+
+
+void menu(){
+    int opcion;
+    cout << "\nCAJERO\n";
+    cout << "1 Consultar saldo\n";
+    cout << "2 Depositar dinero\n";
+    cout << "3 Retirar dinero\n";
+    cout << "0 Salir\n";
+    cout << "Elija una opcion: ";
+    cin >> opcion;
+    return opcion;
 }
