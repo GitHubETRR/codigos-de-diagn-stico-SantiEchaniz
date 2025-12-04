@@ -2,51 +2,37 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <sstream>
 #include <limits>
-#include <algorithm>
-#include <cctype>
 
 using namespace std;
 
 struct Vuelo {
-    int numero{};
+    int numero;
     string destino;
     string salida;
     string llegada;
     string estado;
 };
 
-template<typename T>
-T leerNumero(const string& mensaje) {
-    T valor;
+int leerNumero(const string& mensaje) {
+    int valor;
     while (true) {
         cout << mensaje;
         if (cin >> valor) {
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             return valor;
         }
-        cout << "Entrada invalida, intenta de nuevo." << endl;
+        cout << "Entrada invalida, ingresa un numero." << endl;
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 }
 
-string leerTexto(const string& mensaje) {
-    string s;
-    while (true) {
-        cout << mensaje;
-        cin >> ws;
-        getline(cin, s);
-        if (!s.empty()) return s;
-        cout << "Texto vacio, intenta de nuevo." << endl;
-    }
-}
-
-string aMinusculas(string s) {
-    transform(s.begin(), s.end(), s.begin(),
-              [](unsigned char c){ return static_cast<char>(tolower(c)); });
-    return s;
+string leerCadenaSimple(const string& mensaje) {
+    string texto;
+    cout << mensaje;
+    cin >> texto;
+    return texto;
 }
 
 class Aerolinea {
@@ -56,38 +42,39 @@ private:
 
     bool cargarVuelos() {
         vuelos.clear();
-        ifstream archivo(rutaArchivo);
-        if (!archivo.is_open()) {
-            throw runtime_error("No se pudo abrir el archivo de vuelos.");
+        ifstream archivo(rutaArchivo.c_str());
+        if (!archivo) {
+            cout << "No se pudo abrir el archivo de vuelos." << endl;
+            return false;
         }
 
-        string linea;
-        while (getline(archivo, linea)) {
-            if (linea.empty()) continue;
-
-            istringstream iss(linea);
-            Vuelo v;
-            if (!(iss >> v.numero >> v.destino >> v.salida >> v.llegada >> v.estado)) {
-                continue;
-            }
+        Vuelo v;
+        while (archivo >> v.numero >> v.destino >> v.salida >> v.llegada >> v.estado) {
             vuelos.push_back(v);
         }
 
-        return !vuelos.empty();
+        if (vuelos.empty()) {
+            cout << "El archivo se abrio pero no se encontraron vuelos." << endl;
+            return false;
+        }
+
+        return true;
     }
 
     bool guardarVuelos() const {
-        ofstream archivo(rutaArchivo);
-        if (!archivo.is_open()) {
+        ofstream archivo(rutaArchivo.c_str());
+        if (!archivo) {
             return false;
         }
-        for (const auto& v : vuelos) {
-            archivo << v.numero << ' '
-                    << v.destino << ' '
-                    << v.salida << ' '
-                    << v.llegada << ' '
-                    << v.estado << '\n';
+
+        for (size_t i = 0; i < vuelos.size(); i++) {
+            archivo << vuelos[i].numero << ' '
+                    << vuelos[i].destino << ' '
+                    << vuelos[i].salida << ' '
+                    << vuelos[i].llegada << ' '
+                    << vuelos[i].estado << '\n';
         }
+
         return true;
     }
 
@@ -98,32 +85,21 @@ private:
         }
 
         cout << "\nLISTA DE VUELOS" << endl;
-        for (const auto& v : vuelos) {
-            cout << "Vuelo " << v.numero
-                 << " -> " << v.destino
-                 << " [" << v.salida << " - " << v.llegada << "] "
-                 << "(" << v.estado << ")" << endl;
+        for (size_t i = 0; i < vuelos.size(); i++) {
+            cout << "Vuelo " << vuelos[i].numero
+                 << " -> " << vuelos[i].destino
+                 << " [" << vuelos[i].salida << " - " << vuelos[i].llegada << "] "
+                 << "(" << vuelos[i].estado << ")" << endl;
         }
     }
 
-    const Vuelo* buscarPorNumero(int num) const {
-        auto it = find_if(vuelos.begin(), vuelos.end(),
-                          [num](const Vuelo& v) {
-                              return v.numero == num;
-                          });
-
-        if (it == vuelos.end()) return nullptr;
-        return &(*it);
-    }
-
-    Vuelo* buscarEditablePorNumero(int num) {
-        auto it = find_if(vuelos.begin(), vuelos.end(),
-                          [num](const Vuelo& v) {
-                              return v.numero == num;
-                          });
-
-        if (it == vuelos.end()) return nullptr;
-        return &(*it);
+    int buscarIndicePorNumero(int num) const {
+        for (size_t i = 0; i < vuelos.size(); i++) {
+            if (vuelos[i].numero == num) {
+                return static_cast<int>(i);
+            }
+        }
+        return -1;
     }
 
     void buscarVueloPorNumero() const {
@@ -132,20 +108,22 @@ private:
             return;
         }
 
-        int num = leerNumero<int>("Ingresa el numero de vuelo: ");
-        const Vuelo* v = buscarPorNumero(num);
+        int num = leerNumero("Ingresa el numero de vuelo: ");
+        int indice = buscarIndicePorNumero(num);
 
-        if (!v) {
+        if (indice == -1) {
             cout << "No se encontro el vuelo con ese numero." << endl;
             return;
         }
 
+        const Vuelo& v = vuelos[indice];
+
         cout << "\nINFORMACION DEL VUELO AEROLINEAS ARGENTINAS" << endl;
-        cout << "Numero : " << v->numero << endl;
-        cout << "Destino: " << v->destino << endl;
-        cout << "Salida : " << v->salida << endl;
-        cout << "Llegada: " << v->llegada << endl;
-        cout << "Estado : " << v->estado << endl;
+        cout << "Numero : " << v.numero << endl;
+        cout << "Destino: " << v.destino << endl;
+        cout << "Salida : " << v.salida << endl;
+        cout << "Llegada: " << v.llegada << endl;
+        cout << "Estado : " << v.estado << endl;
     }
 
     void buscarVuelosPorDestino() const {
@@ -154,27 +132,22 @@ private:
             return;
         }
 
-        string dest = leerTexto("Ingresa el destino (o parte del destino): ");
-        string destMin = aMinusculas(dest);
+        string dest = leerCadenaSimple("Ingresa el destino (o parte, sin espacios): ");
 
-        vector<const Vuelo*> resultados;
+        bool encontrado = false;
+        cout << "\nVUELOS ENCONTRADOS PARA DESTINO \"" << dest << "\":" << endl;
 
-        for (const auto& v : vuelos) {
-            if (aMinusculas(v.destino).find(destMin) != string::npos) {
-                resultados.push_back(&v);
+        for (size_t i = 0; i < vuelos.size(); i++) {
+            if (vuelos[i].destino.find(dest) != string::npos) {
+                cout << "Vuelo " << vuelos[i].numero
+                     << " -> " << vuelos[i].destino
+                     << " (" << vuelos[i].estado << ")" << endl;
+                encontrado = true;
             }
         }
 
-        if (resultados.empty()) {
+        if (!encontrado) {
             cout << "No se encontraron vuelos con ese destino." << endl;
-            return;
-        }
-
-        cout << "\nVUELOS ENCONTRADOS PARA DESTINO \"" << dest << "\":" << endl;
-        for (const auto* v : resultados) {
-            cout << "Vuelo " << v->numero
-                 << " -> " << v->destino
-                 << " (" << v->estado << ")" << endl;
         }
     }
 
@@ -184,50 +157,41 @@ private:
             return;
         }
 
-        string est = leerTexto("Ingresa el estado (Ej: EnHorario, Demorado, Cancelado): ");
-        string estMin = aMinusculas(est);
+        string est = leerCadenaSimple("Ingresa el estado (Ej: EnHorario, Demorado, Cancelado): ");
 
-        vector<const Vuelo*> resultados;
+        bool encontrado = false;
+        cout << "\nVUELOS CON ESTADO \"" << est << "\":" << endl;
 
-        for (const auto& v : vuelos) {
-            if (aMinusculas(v.estado) == estMin) {
-                resultados.push_back(&v);
+        for (size_t i = 0; i < vuelos.size(); i++) {
+            if (vuelos[i].estado == est) {
+                cout << "Vuelo " << vuelos[i].numero
+                     << " -> " << vuelos[i].destino
+                     << " [" << vuelos[i].salida << " - " << vuelos[i].llegada << "]" << endl;
+                encontrado = true;
             }
         }
 
-        if (resultados.empty()) {
+        if (!encontrado) {
             cout << "No se encontraron vuelos con ese estado." << endl;
-            return;
-        }
-
-        cout << "\nVUELOS CON ESTADO \"" << est << "\":" << endl;
-        for (const auto* v : resultados) {
-            cout << "Vuelo " << v->numero
-                 << " -> " << v->destino
-                 << " [" << v->salida << " - " << v->llegada << "]" << endl;
         }
     }
 
     void agregarVuelo() {
         Vuelo v;
-        v.numero = leerNumero<int>("Numero de vuelo: ");
+        v.numero = leerNumero("Numero de vuelo: ");
 
-        if (buscarPorNumero(v.numero)) {
+        if (buscarIndicePorNumero(v.numero) != -1) {
             cout << "Ya existe un vuelo con ese numero." << endl;
             return;
         }
 
         cout << "IMPORTANTE: evita usar espacios en destino, salida, llegada y estado." << endl;
-        cout << "Ejemplos: 'Madrid', '10:30', 'EnHorario', 'Demorado'.\n";
+        cout << "Ejemplos: Madrid / 10:30 / EnHorario / Demorado\n";
 
-        cout << "Destino: ";
-        cin >> v.destino;
-        cout << "Hora de salida: ";
-        cin >> v.salida;
-        cout << "Hora de llegada: ";
-        cin >> v.llegada;
-        cout << "Estado: ";
-        cin >> v.estado;
+        v.destino = leerCadenaSimple("Destino: ");
+        v.salida = leerCadenaSimple("Hora de salida: ");
+        v.llegada = leerCadenaSimple("Hora de llegada: ");
+        v.estado = leerCadenaSimple("Estado: ");
 
         vuelos.push_back(v);
         cout << "Vuelo agregado correctamente (aun no guardado en archivo)." << endl;
@@ -239,60 +203,73 @@ private:
             return;
         }
 
-        int num = leerNumero<int>("Numero de vuelo a modificar: ");
-        Vuelo* v = buscarEditablePorNumero(num);
+        int num = leerNumero("Numero de vuelo a modificar: ");
+        int indice = buscarIndicePorNumero(num);
 
-        if (!v) {
+        if (indice == -1) {
             cout << "No se encontro el vuelo." << endl;
             return;
         }
 
-        cout << "Estado actual: " << v->estado << endl;
-        cout << "IMPORTANTE: evita usar espacios. Ej: EnHorario, Demorado, Cancelado.\n";
-        cout << "Nuevo estado: ";
-        string nuevo;
-        cin >> nuevo;
-        v->estado = nuevo;
+        cout << "Estado actual: " << vuelos[indice].estado << endl;
+        cout << "IMPORTANTE: evita usar espacios. Ej: EnHorario, Demorado, Cancelado." << endl;
+
+        string nuevo = leerCadenaSimple("Nuevo estado: ");
+        vuelos[indice].estado = nuevo;
+
         cout << "Estado actualizado (aun no guardado en archivo)." << endl;
     }
 
     void ordenarPorNumero() {
-        sort(vuelos.begin(), vuelos.end(),
-             [](const Vuelo& a, const Vuelo& b) {
-                 return a.numero < b.numero;
-             });
+        if (vuelos.size() < 2) {
+            cout << "No hay suficientes vuelos para ordenar." << endl;
+            return;
+        }
+
+        for (size_t i = 0; i < vuelos.size() - 1; i++) {
+            for (size_t j = i + 1; j < vuelos.size(); j++) {
+                if (vuelos[j].numero < vuelos[i].numero) {
+                    Vuelo aux = vuelos[i];
+                    vuelos[i] = vuelos[j];
+                    vuelos[j] = aux;
+                }
+            }
+        }
+
         cout << "Vuelos ordenados por numero." << endl;
     }
 
     void ordenarPorDestino() {
-        sort(vuelos.begin(), vuelos.end(),
-             [](const Vuelo& a, const Vuelo& b) {
-                 return a.destino < b.destino;
-             });
+        if (vuelos.size() < 2) {
+            cout << "No hay suficientes vuelos para ordenar." << endl;
+            return;
+        }
+
+        for (size_t i = 0; i < vuelos.size() - 1; i++) {
+            for (size_t j = i + 1; j < vuelos.size(); j++) {
+                if (vuelos[j].destino < vuelos[i].destino) {
+                    Vuelo aux = vuelos[i];
+                    vuelos[i] = vuelos[j];
+                    vuelos[j] = aux;
+                }
+            }
+        }
+
         cout << "Vuelos ordenados por destino." << endl;
     }
 
     void recargarDesdeArchivo() {
-        try {
-            if (cargarVuelos()) {
-                cout << "Vuelos recargados desde el archivo." << endl;
-            } else {
-                cout << "Archivo vacio o sin vuelos validos." << endl;
-            }
-        } catch (const exception& e) {
-            cout << "Error al recargar: " << e.what() << endl;
+        if (cargarVuelos()) {
+            cout << "Vuelos recargados desde el archivo." << endl;
+        } else {
+            cout << "No se pudieron recargar los vuelos." << endl;
         }
     }
 
 public:
-    Aerolinea(const string& ruta = "vuelos.txt") : rutaArchivo(ruta) {
-        try {
-            if (!cargarVuelos()) {
-                cout << "El archivo se abrio pero no se encontraron vuelos." << endl;
-            }
-        } catch (const exception& e) {
-            cout << "Error, sistema no disponible: " << e.what() << endl;
-        }
+    Aerolinea(const string& ruta = "vuelos.txt") {
+        rutaArchivo = ruta;
+        cargarVuelos();
     }
 
     void mostrarMenu() {
@@ -311,7 +288,7 @@ public:
             cout << "10. Recargar vuelos desde archivo" << endl;
             cout << "11. Salir" << endl;
 
-            opcion = leerNumero<int>("Seleccione una opcion: ");
+            opcion = leerNumero("Seleccione una opcion: ");
 
             switch (opcion) {
                 case 1:
@@ -360,7 +337,9 @@ public:
 };
 
 int main() {
+
     Aerolinea sistema;
+
     sistema.mostrarMenu();
     return 0;
 }
