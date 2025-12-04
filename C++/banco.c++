@@ -1,5 +1,5 @@
 #include <iostream>
-#include <fstream>   // Necesario para trabajar con archivos
+#include <fstream>  
 using namespace std;
 
 int menu();
@@ -9,7 +9,6 @@ int main() {
     int opcionprogram;
     double monto;
 
-    // Abrir archivo en modo append (agrega sin borrar)
     ofstream archivo("C:\\Users\\sechaniz.ETRR\\Desktop\\VCSCODE EN C\\bancosantu.txt");
 
     if (!archivo) {
@@ -17,7 +16,7 @@ int main() {
         return 1;
     }
 
-    archivo << "----- INICIO DEL PROGRAMA -----\n";
+    archivo << "INICIO DEL PROGRAMA\n";
 
     do {
         opcionprogram = menu();
@@ -59,7 +58,7 @@ int main() {
 
             case 0:
                 cout << "Chau\n";
-                archivo << "----- FIN DEL PROGRAMA -----\n\n";
+                archivo << "-FIN\n";
                 break;
 
             default:
@@ -68,7 +67,7 @@ int main() {
 
     } while (opcionprogram != 0);
 
-    archivo.close();  // Cerrar archivo
+    archivo.close(); 
 
     return 0;
 }
