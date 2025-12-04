@@ -1,55 +1,79 @@
 #include <iostream>
+#include <fstream>   // Necesario para trabajar con archivos
 using namespace std;
+
 int menu();
 
-
 int main() {
-    double saldo = 10000.0;  // saldo inicial
+    double saldo = 10000.0;  
     int opcionprogram;
-    
     double monto;
 
+    // Abrir archivo en modo append (agrega sin borrar)
+    ofstream archivo("C:\\Users\\sechaniz.ETRR\\Desktop\\VCSCODE EN C\\bancosantu.txt");
+
+    if (!archivo) {
+        cout << "Error al abrir el archivo." << endl;
+        return 1;
+    }
+
+    archivo << "----- INICIO DEL PROGRAMA -----\n";
+
     do {
-        opcionprogram=menu();
+        opcionprogram = menu();
+
         switch(opcionprogram) {
+
             case 1:
                 cout << "Su saldo es: $" << saldo << endl;
+                archivo << "Consulta de saldo: $" << saldo << endl;
                 break;
+
             case 2:
                 cout << "Ingrese el monto a ingresar: ";
                 cin >> monto;
                 if (monto > 0) {
                     saldo += monto;
                     cout << "Deposito exitoso. Nuevo saldo: $" << saldo << endl;
+                    archivo << "Deposito de $" << monto 
+                            << " | Nuevo saldo: $" << saldo << endl;
                 } else {
                     cout << "Monto invalido.\n";
+                    archivo << "Intento de deposito invalido.\n";
                 }
                 break;
+
             case 3:
                 cout << "Ingrese monto a retirar: ";
                 cin >> monto;
                 if (monto > 0 && monto <= saldo) {
                     saldo -= monto;
                     cout << "Retiro exitoso. Nuevo saldo: $" << saldo << endl;
+                    archivo << "Retiro de $" << monto 
+                            << " | Nuevo saldo: $" << saldo << endl;
                 } else {
                     cout << "Monto invalido o fondos insuficientes.\n";
+                    archivo << "Intento de retiro invalido o saldo insuficiente.\n";
                 }
                 break;
+
             case 0:
                 cout << "Chau\n";
+                archivo << "----- FIN DEL PROGRAMA -----\n\n";
                 break;
+
             default:
                 cout << "Opcion invalida.\n";
         }
 
-    } while (opcion != 0);
+    } while (opcionprogram != 0);
+
+    archivo.close();  // Cerrar archivo
 
     return 0;
 }
 
-
-
-void menu(){
+int menu() {
     int opcion;
     cout << "\nCAJERO\n";
     cout << "1 Consultar saldo\n";
