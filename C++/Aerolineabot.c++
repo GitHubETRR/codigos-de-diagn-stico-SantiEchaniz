@@ -19,7 +19,7 @@ private:
     int cargarVuelos() {
         ifstream archivo("C:\Users\sechaniz.ETRR\Desktop\VCSCODE EN C\vuelos.txt");
         if (!archivo) {
-            cout << "Error: sistema no disponible" << endl;
+            cout << "Error, sistema no disponible" << endl;
             cantidad = 0;
             return 0;
         }
