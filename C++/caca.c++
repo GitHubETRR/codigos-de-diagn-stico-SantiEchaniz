@@ -36,7 +36,7 @@ int main() {
                 }
                 break;
             case 0:
-                cout << "Gracias por usar el cajero. Adios!\n";
+                cout << "Chau\n";
                 break;
             default:
                 cout << "Opcion invalida.\n";
