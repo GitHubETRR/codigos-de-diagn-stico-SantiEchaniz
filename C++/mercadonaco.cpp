@@ -3,6 +3,7 @@
 #include <string>
 #include <limits>
 #include <iomanip>
+
 using namespace std;
 
 int menu() {
@@ -24,6 +25,7 @@ int menu() {
     return opcion;
 }
 
+//CLASE MOVIMIENTO
 class Movimiento {
 private:
     string tipo;
@@ -36,6 +38,7 @@ public:
     double getMonto() const { return monto; }
 };
 
+//CLASE ABSTRACTA CUENTA
 class Cuenta {
 protected:
     double saldo;
@@ -75,13 +78,13 @@ public:
         }
     }
 
-    // Métodos VIRTUALES → se redefinen en las clases hijas
+    // se redefinen en las clases hijas
     virtual void depositar(double monto) = 0;
     virtual bool retirar(double monto) = 0;
     virtual bool transferir(const string& destino, double monto) = 0;
 };
 
-
+// CLASE CUENTA CONCRETA
 class CuentaBancariaSimple : public Cuenta {
 public:
     CuentaBancariaSimple(double saldoInicial, const string& aliasInicial)
@@ -104,4 +107,110 @@ public:
     bool transferir(const string& destino, double monto) override {
         if (monto <= saldo) {
             saldo -= monto;
-            registrarMovimi
+            registrarMovimiento("Transferencia a " + destino, monto);
+            return true;
+        }
+        return false;
+    }
+};
+
+//CLASE CAJERO AUTOMATICO 
+class CajeroAutomatico {
+private:
+    Cuenta* cuenta;
+
+    double leerMonto(const string& mensaje) {
+        double monto;
+        while (true) {
+            cout << mensaje;
+            if (cin >> monto && monto > 0) {
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                return monto;
+            }
+            cout << "Monto invalido. Intente nuevamente.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    }
+
+public:
+    explicit CajeroAutomatico(Cuenta* c) : cuenta(c) {}
+
+    void ejecutar() {
+        int opcion;
+        do {
+            opcion = menu();
+            switch (opcion) {
+                case 1: // Consultar saldo simple
+                    cout << "Alias de la cuenta: " << cuenta->getAlias() << "\n";
+                    cuenta->mostrarSaldo(false);
+                    break;
+
+                case 2: { // Transferir
+                    double monto = leerMonto("Ingrese el monto a depositar: ");
+                    cuenta->depositar(monto);
+                    cout << "Deposito realizado correctamente.\n";
+                    break;
+                }
+
+                case 3: { // Retirar
+                    double monto = leerMonto("Ingrese el monto a retirar: ");
+                    if (cuenta->retirar(monto)) {
+                        cout << "Retiro exitoso.\n";
+                    } else {
+                        cout << "Fondos insuficientes.\n";
+                    }
+                    break;
+                }
+
+                case 4: { // Cambiar alias
+                    string nuevoAlias;
+                    cout << "Ingrese el nuevo alias (sin espacios): ";
+                    cin >> nuevoAlias;
+                    cuenta->setAlias(nuevoAlias);
+                    cout << "Alias actualizado correctamente.\n";
+                    break;
+                }
+
+                case 5: { // Transferencia
+                    string destino;
+                    cout << "Ingrese el alias de destino (sin espacios): ";
+                    cin >> destino;
+                    double monto = leerMonto("Ingrese el monto a transferir: ");
+                    if (cuenta->transferir(destino, monto)) {
+                        cout << "Transferencia realizada a " << destino << "\n";
+                    } else {
+                        cout << "No se pudo realizar la transferencia (fondos insuficientes).\n";
+                    }
+                    break;
+                }
+
+                case 6: // Ver saldo con movimientos
+                    cout << "Alias de la cuenta: " << cuenta->getAlias() << "\n";
+                    cuenta->mostrarSaldo(true);
+                    break;
+
+                case 0:
+                    cout << "Saliendo del cajero...\n";
+                    break;
+
+                default:
+                    cout << "Opcion invalida. Intente nuevamente.\n";
+                    break;
+            }
+        } while (opcion != 0);
+    }
+};
+
+int main() {
+    // cuenta de prueba
+    CuentaBancariaSimple miCuenta(10000.0, "santu.caja");
+
+    // Cajero y le paso la cuenta
+    CajeroAutomatico cajero(&miCuenta);
+
+    // Inicio el menú del cajero
+    cajero.ejecutar();
+
+    return 0;
+}
