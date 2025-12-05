@@ -46,11 +46,12 @@ public:
     
     //Constructor con parametros
    Vuelo(int num, const string& dest, const string& sal, const string& lle, const string& est)
-    : numero = num, //inicializo el atributo con el valor
-      destino = dest,
-      salida = sal,
-      llegada = lle,
-      estado = est {}
+    : numero(num),//inicializo el atributo con el valor
+      destino(dest),
+      salida(sal),
+      llegada(lle),
+      estado(est)
+    {}
       
     //Getters
     int getNumero() const { return numero; }
