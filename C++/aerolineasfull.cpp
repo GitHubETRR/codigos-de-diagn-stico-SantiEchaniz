@@ -18,12 +18,16 @@ typedef enum{
     ORDENAR_X_ESTADO,
     ORDENAR_X_NdeVUELO,
     ORDENAR_X_DESTINO,
-    
-    
     SALIR,
-    
-}opcion_t;
+}opcion_menu;
 
+typedef enum{
+    EN_HORARIO=1,
+    DEMORADO,
+    CANCELADO,
+}opcion_estado;
+
+//Clase vuelo
 
 class Vuelo {
 private:
@@ -35,24 +39,27 @@ private:
     string estado;     //estado del vuelo
 
 public:
-    Vuelo() : numero(0) {}
-
+    //Constructores
+    Vuelo() : numero(0) {} //numero de vuelos=0
     Vuelo(int num, const string& dest, const string& sal,
           const string& lle, const string& est)
         : numero(num), destino(dest), salida(sal), llegada(lle), estado(est) {}
-
+    
+    //Getters
     int getNumero() const { return numero; }
     const string& getDestino() const { return destino; }
     const string& getSalida() const { return salida; }
     const string& getLlegada() const { return llegada; }
     const string& getEstado() const { return estado; }
-
+    
+    //Setters
     void setNumero(int n) { numero = n; }
     void setDestino(const string& d) { destino = d; }
     void setSalida(const string& s) { salida = s; }
     void setLlegada(const string& l) { llegada = l; }
     void setEstado(const string& e) { estado = e; }
-
+    
+    //Mostrar
     void mostrarResumen() const {
         cout << "Vuelo " << numero
              << " -> " << destino
@@ -71,6 +78,7 @@ public:
 };
 
 
+//Funcion leer n de vuelo
 
 int leerNumero(const string& mensaje) {
     int valor;
@@ -92,6 +100,37 @@ string leerCadenaSimple(const string& mensaje) {
     cin >> texto;
     return texto;
 }
+
+
+string elegirEstado() {
+    while (true) {
+        cout << "\nSeleccione el estado del vuelo:\n";
+        cout << "1. En Horario\n";
+        cout << "2. Demorado\n";
+        cout << "3. Cancelado\n";
+        
+        int opcion = leerNumero("Opcion: ");
+        
+        switch (opcion) {
+            case EN_HORARIO: 
+                return "EnHorario";
+                break;
+                
+            case DEMORADO: 
+                return "Demorado";
+                break;
+                
+            case CANCELADO:
+                return "Cancelado";
+                break;
+                
+            default:
+                cout << "Opcion invalida. Intente nuevamente.\n";
+                break;
+        }
+    }
+}
+
 
 class SistemaVuelos {
     protected:
@@ -139,13 +178,13 @@ class SistemaVuelos {
             return true;
         } 
         
-        void mostrarVuelos() const {
+        void mostrarVuelos(const string& nombre) const {
             if (vuelos.empty()) {
                 cout << "\nNo hay vuelos cargados." << endl;
                 return;
             }
             
-            cout << "\nLISTA DE VUELOS AEROLINEAS ARGENTINAS" << endl;
+            cout << "\nLISTA DE VUELOS " << nombre << endl;
             for (size_t i = 0; i < vuelos.size(); i++) {
                 vuelos[i].mostrarResumen();
             }
@@ -194,6 +233,7 @@ class Aerolinea : public SistemaVuelos {
         }
         
         
+        
         void buscarVuelosPorDestino() const {
             if (vuelos.empty()) {
                 cout << "No hay vuelos cargados para buscar." << endl;
@@ -218,14 +258,14 @@ class Aerolinea : public SistemaVuelos {
         }
         
         
+        
         void listarPorEstado() const {
             if (vuelos.empty()) {
                 cout << "No hay vuelos cargados." << endl;
                 return;
             }
             
-            string est = leerCadenaSimple("Ingresa el estado (Ej: EnHorario, Demorado, Cancelado): ");
-            
+            string est = elegirEstado();
             bool encontrado = false;
             cout << "\nVUELOS CON ESTADO \"" << est << "\":" << endl;
             
@@ -241,6 +281,8 @@ class Aerolinea : public SistemaVuelos {
             }
         }
         
+        
+        
         void agregarVuelo() {
             Vuelo v;
             int num = leerNumero("Numero de vuelo: ");
@@ -252,12 +294,12 @@ class Aerolinea : public SistemaVuelos {
             
             cout << "\n\n\n\n---------------------------------------------------------------------" << endl;
             cout << "IMPORTANTE: evita usar espacios en destino, salida, llegada y estado." << endl;
-            cout << " Ejemplos: Madrid / 10:30 / EnHorario / Demorado\n";
+            cout << " Ejemplos: Madrid / 10:30 / En Horario (menu) / Demorado\n";
             
             string dest = leerCadenaSimple("Destino: ");
             string sal = leerCadenaSimple("Hora de salida: ");
             string lle = leerCadenaSimple("Hora de llegada: ");
-            string est = leerCadenaSimple("Estado: ");
+            string est = elegirEstado();
             
             v.setNumero(num);
             v.setDestino(dest);
@@ -268,6 +310,8 @@ class Aerolinea : public SistemaVuelos {
             vuelos.push_back(v);
             cout << "Vuelo agregado correctamente (aun no guardado en archivo)." << endl;
         }
+        
+        
         
         void cambiarEstadoVuelo() {
             if (vuelos.empty()) {
@@ -284,13 +328,12 @@ class Aerolinea : public SistemaVuelos {
             }
             
             cout << "Estado actual: " << vuelos[indice].getEstado() << endl;
-            cout << "IMPORTANTE: evita usar espacios. Ej: EnHorario, Demorado, Cancelado." << endl;
-            
-            string nuevo = leerCadenaSimple("Nuevo estado: ");
+            string nuevo = elegirEstado(); 
             vuelos[indice].setEstado(nuevo);
-            
             cout << "Estado actualizado (aun no guardado en archivo)." << endl;
         }
+        
+        
         
         void ordenarPorNumero() {
             if (vuelos.size() < 2) {
@@ -311,6 +354,8 @@ class Aerolinea : public SistemaVuelos {
             cout << "Vuelos ordenados por numero." << endl;
         }
         
+        
+        
         void ordenarPorDestino() {
             if (vuelos.size() < 2) {
                 cout << "No hay suficientes vuelos para ordenar." << endl;
@@ -330,6 +375,7 @@ class Aerolinea : public SistemaVuelos {
             cout << "Vuelos ordenados por destino." << endl;
         }
         
+        
         void recargarDesdeArchivo() {
             if (cargarVuelos()) {
                 cout << "Vuelos recargados desde el archivo." << endl;
@@ -337,6 +383,7 @@ class Aerolinea : public SistemaVuelos {
                 cout << "No se pudieron recargar los vuelos." << endl;
             }
         }
+
 
     public:
         Aerolinea(const string& ruta = "vuelos.txt",
@@ -346,7 +393,7 @@ class Aerolinea : public SistemaVuelos {
         void mostrarMenu() override {
             int opcion = 0;
             do {
-                cout << "\nMENU AEROLINEAS ARGENTINAS" << endl;
+                cout << "\nMENU " << nombre << endl;
                 cout << "1. Ver lista de vuelos" << endl;
                 cout << "2. Agregar nuevo vuelo" << endl;
                 cout << "3. Guardar cambios en archivo" << endl;
@@ -363,7 +410,7 @@ class Aerolinea : public SistemaVuelos {
                 
                 switch (opcion) {
                     case MOSTRAR_INFO:
-                        mostrarVuelos();
+                        mostrarVuelos(nombre);
                         break;
                     
                     case AGREGAR_VUELOS:
