@@ -41,8 +41,9 @@ private:
 public:
     //Constructores
     Vuelo() : numero(0) {} //numero de vuelos=0
-    Vuelo(int num, const string& dest, const string& sal,
-          const string& lle, const string& est)
+    
+    //Constructor con parametros
+    Vuelo(int num, const string& dest, const string& sal, const string& lle, const string& est)
         : numero(num), destino(dest), salida(sal), llegada(lle), estado(est) {}
     
     //Getters
@@ -83,9 +84,9 @@ public:
 int leerNumero(const string& mensaje) {
     int valor;
     while (true) {
-        cout << mensaje;
+        cout << mensaje; //muestra la opcion a completar
         if (cin >> valor) {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); //limpia el resto de la línea del buffer.
             return valor;
         }
         cout << "Entrada invalida, ingresa un numero." << endl;
@@ -94,6 +95,7 @@ int leerNumero(const string& mensaje) {
     }
 }
 
+//lee hasta el primer espacio
 string leerCadenaSimple(const string& mensaje) {
     string texto;
     cout << mensaje;
@@ -137,7 +139,7 @@ class SistemaVuelos {
         vector<Vuelo> vuelos;
         string rutaArchivo;
         
-        bool cargarVuelos() {
+        bool cargarVuelos() { //el bool es para el if cargarvuelos(), si es true o false
             vuelos.clear();
             ifstream archivo(rutaArchivo.c_str());
             if (!archivo) {
@@ -146,7 +148,7 @@ class SistemaVuelos {
             }
             
             int num;
-            string dest, sal, lle, est;
+            string dest, sal, lle, est; //Declaro variables locales para leer cada campo
             
             while (archivo >> num >> dest >> sal >> lle >> est) {
                 Vuelo v(num, dest, sal, lle, est);
@@ -167,7 +169,7 @@ class SistemaVuelos {
                 return false;
             }
             
-            for (size_t i = 0; i < vuelos.size(); i++) {
+            for (size_t i = 0; i < vuelos.size(); i++) { //Recorre el vector y para cada objeto escribe las vars
                 archivo << vuelos[i].getNumero() << ' '
                         << vuelos[i].getDestino() << ' '
                         << vuelos[i].getSalida() << ' '
@@ -192,8 +194,8 @@ class SistemaVuelos {
         
         int buscarIndicePorNumero(int num) const {
             for (size_t i = 0; i < vuelos.size(); i++) {
-                if (vuelos[i].getNumero() == num) {
-                    return static_cast<int>(i);
+                if (vuelos[i].getNumero() == num) { 
+                    return static_cast<int>(i); //Encontro el vuelo, convierte para asegurarse de devolverlo como int ese i
                 }
             }
             return -1;
@@ -201,13 +203,13 @@ class SistemaVuelos {
 
     public:
         SistemaVuelos(const string& ruta)
-            : rutaArchivo(ruta) {
+            : rutaArchivo(ruta) { //intenta cargar los datos
             cargarVuelos();
         }
     
-    virtual ~SistemaVuelos() {}
+    virtual ~SistemaVuelos() {} //DESTRUCTOR, si clase hija (como Aerolinea) tiene su propio destr, se llama correctamente.Buena práctica
 
-    virtual void mostrarMenu() = 0;
+    virtual void mostrarMenu() = 0; //Fuerzo a la clase hija a implementar su propio menu
 };
 
 
@@ -224,7 +226,7 @@ class Aerolinea : public SistemaVuelos {
             int num = leerNumero("Ingresa el numero de vuelo: ");
             int indice = buscarIndicePorNumero(num);
             
-            if (indice == -1) {
+            if (indice == -1) { //no lo encuentra (-1)
                 cout << "No se encontro el vuelo con ese numero." << endl;
                 return;
             }
@@ -246,7 +248,7 @@ class Aerolinea : public SistemaVuelos {
             cout << "\nVUELOS ENCONTRADOS PARA DESTINO \"" << dest << "\":" << endl;
             
             for (size_t i = 0; i < vuelos.size(); i++) {
-                if (vuelos[i].getDestino().find(dest) != string::npos) {
+                if (vuelos[i].getDestino().find(dest) != string::npos) { //Si no lo encuentra, devuelve string::npos -no encontrado
                     vuelos[i].mostrarResumen();
                     encontrado = true;
                 }
@@ -268,7 +270,8 @@ class Aerolinea : public SistemaVuelos {
             string est = elegirEstado();
             bool encontrado = false;
             cout << "\nVUELOS CON ESTADO \"" << est << "\":" << endl;
-            
+            //Recorre los vuelos y compara getEstado() con ese string, muestra solo los que coinciden.
+
             for (size_t i = 0; i < vuelos.size(); i++) {
                 if (vuelos[i].getEstado() == est) {
                     vuelos[i].mostrarResumen();
@@ -296,19 +299,19 @@ class Aerolinea : public SistemaVuelos {
             cout << "IMPORTANTE: evita usar espacios en destino, salida, llegada y estado." << endl;
             cout << " Ejemplos: Madrid / 10:30 / En Horario (menu) / Demorado\n";
             
-            string dest = leerCadenaSimple("Destino: ");
-            string sal = leerCadenaSimple("Hora de salida: ");
-            string lle = leerCadenaSimple("Hora de llegada: ");
-            string est = elegirEstado();
+            string dest = leerCadenaSimple("Destino: ");          //Destino
+            string sal = leerCadenaSimple("Hora de salida: ");    //Hora de salida
+            string lle = leerCadenaSimple("Hora de llegada: ");   //Hora de llegada
+            string est = elegirEstado();                          //Estado del vuelo
             
-            v.setNumero(num);
+            v.setNumero(num); //crea todas als varieables del nuevo objeto vuelo
             v.setDestino(dest);
             v.setSalida(sal);
             v.setLlegada(lle);
             v.setEstado(est);
             
             vuelos.push_back(v);
-            cout << "Vuelo agregado correctamente (aun no guardado en archivo)." << endl;
+            cout << "Vuelo agregado correctamente (no guardado en archivo todavia)." << endl;
         }
         
         
@@ -341,6 +344,7 @@ class Aerolinea : public SistemaVuelos {
                 return;
             }
             
+            //Compara, si j es menor que i, los intercambia
             for (size_t i = 0; i < vuelos.size() - 1; i++) {
                 for (size_t j = i + 1; j < vuelos.size(); j++) {
                     if (vuelos[j].getNumero() < vuelos[i].getNumero()) {
@@ -356,7 +360,7 @@ class Aerolinea : public SistemaVuelos {
         
         
         
-        void ordenarPorDestino() {
+        void ordenarPorDestino() { //alfabeticamente
             if (vuelos.size() < 2) {
                 cout << "No hay suficientes vuelos para ordenar." << endl;
                 return;
@@ -386,7 +390,8 @@ class Aerolinea : public SistemaVuelos {
 
 
     public:
-        Aerolinea(const string& ruta = "vuelos.txt",
+        //CONSTRUCTOR VUELOS
+        Aerolinea(const string& ruta = "C:\\Users\\sechaniz.ETRR\\Desktop\\VCSCODE EN C\\vuelos.txt",
                 const string& nombreAerolinea = "AEROLINEAS ARGENTINAS")
             : SistemaVuelos(ruta), nombre(nombreAerolinea) {}
             
@@ -468,10 +473,8 @@ class Aerolinea : public SistemaVuelos {
 };
 
 int main() {
-    Aerolinea aerolinea("vuelos.txt", "AEROLINEAS ARGENTINAS");
-
-    SistemaVuelos* sistema = &aerolinea;
-
-    sistema->mostrarMenu();
+    Aerolinea aerolinea("vuelos.txt", "AEROLINEAS ARGENTINAS"); //Crea un objeto Aerolinea
+    SistemaVuelos* sistema = &aerolinea; //Guarda un puntero que apunta a ese objeto
+    sistema->mostrarMenu(); //llamo al menu para empezar el programa
     return 0;
 }
