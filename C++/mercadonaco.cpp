@@ -38,7 +38,7 @@ public:
     double getMonto() const { return monto; }
 };
 
-//CLASE ABSTRACTA CUENTA
+//CLASE CUENTA
 class Cuenta {
 protected:
     double saldo;
