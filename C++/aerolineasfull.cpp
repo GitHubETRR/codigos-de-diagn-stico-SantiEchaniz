@@ -40,12 +40,18 @@ private:
 
 public:
     //Constructores
-    Vuelo() : numero(0) {} //numero de vuelos=0
+    Vuelo() {
+        numero = 0;
+    }
     
     //Constructor con parametros
-    Vuelo(int num, const string& dest, const string& sal, const string& lle, const string& est)
-        : numero(num), destino(dest), salida(sal), llegada(lle), estado(est) {}
-    
+   Vuelo(int num, const string& dest, const string& sal, const string& lle, const string& est)
+    : numero = num, //inicializo el atributo con el valor
+      destino = dest,
+      salida = sal,
+      llegada = lle,
+      estado = est {}
+      
     //Getters
     int getNumero() const { return numero; }
     const string& getDestino() const { return destino; }
@@ -68,7 +74,7 @@ public:
              << "(" << estado << ")" << endl;
     }
 
-    void mostrarDetalle(const string& nombreAerolinea) const {
+    void mostrarDetalle(const string& nombreAerolinea) const { //aca solo le doy el nombre, porq despues le doy el
         cout << "\nINFORMACION DEL VUELO " << nombreAerolinea << endl;
         cout << "Numero : " << numero << endl;
         cout << "Destino: " << destino << endl;
@@ -226,12 +232,12 @@ class Aerolinea : public SistemaVuelos {
             int num = leerNumero("Ingresa el numero de vuelo: ");
             int indice = buscarIndicePorNumero(num);
             
-            if (indice == -1) { //no lo encuentra (-1)
+            if (indice == -1) { //no lo encuentra (-1), estado del programa
                 cout << "No se encontro el vuelo con ese numero." << endl;
                 return;
             }
             
-            vuelos[indice].mostrarDetalle(nombre);
+            vuelos[indice].mostrarDetalle(nombre); //vuelos indice es un objeto Vuelo
         }
         
         
