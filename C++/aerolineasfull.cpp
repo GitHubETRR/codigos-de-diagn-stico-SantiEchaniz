@@ -45,13 +45,13 @@ public:
     }
     
     //Constructor con parametros
-   Vuelo(int num, const string& dest, const string& sal, const string& lle, const string& est)
-    : numero(num),//inicializo el atributo con el valor
-      destino(dest),
-      salida(sal),
-      llegada(lle),
-      estado(est)
-    {}
+   Vuelo(int num, const string& dest, const string& sal, const string& lle, const string& est){
+      numero = num;
+      destino = dest;
+      salida = sal;
+      llegada = lle;
+      estado = est;
+    }
       
     //Getters
     int getNumero() const { return numero; }
@@ -97,7 +97,7 @@ int leerNumero(const string& mensaje) {
             return valor;
         }
         cout << "Entrada invalida, ingresa un numero." << endl;
-        cin.clear();
+        cin.clear(); //si pones letras
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 }
